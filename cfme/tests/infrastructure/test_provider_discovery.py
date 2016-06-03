@@ -84,6 +84,29 @@ def delete_providers_after_test():
 
 @pytest.mark.usefixtures('has_no_infra_providers', 'delete_providers_after_test')
 def test_discover_infra(providers_for_discover, start_ip, max_range):
+    """This tests provider discovery based on provider type on same subnet
+        1)single provider
+        2)couples of providers
+        3)all providers together
+
+        Uses:
+        find_neighbour_provider_combinations - read yaml file and find suitable providers on same
+        subnet.
+        pytest_generate_tests - returns provider objects for testing
+        count_timeout - returns wait time based on number of IP addresses scanned
+        _wait_for_all_providers - after timeout, thic function checks if all required providers
+        were found
+
+        Steps:
+            * Find suitable providers with common subnet (one for each type)
+            * Test provider discovery for each provider from providers_for_discover
+            * Verify provider was found
+            * Create couples from providers_for_discover and test provider discovery for them
+            * Verify both providers from couple was found
+            * Test provider discovery for combination of all providers from providers_for_discover
+            * Verify all three providers were found
+    """
+
     rhevm = False
     scvmm = False
     virtualcenter = False
